@@ -6,6 +6,6 @@ RUN apk add --no-cache --virtual .build-deps gcc musl-dev libressl-dev libffi-de
     && apk add gcc musl-dev python3-dev \
     && pip install cython \
     && pip install -r requirements.txt \
-    && apk del .build-deps gcc musl-dev libressl-dev libffi-dev
+    && apk del .build-deps gcc musl-dev
 ENTRYPOINT ["python3"]
 CMD ["Server.py"]
