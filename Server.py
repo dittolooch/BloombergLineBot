@@ -26,12 +26,16 @@ def webhook():
     return "OK", 200
 
 
-class HelloWorld(Resource):
-    def get(self):
-        return {'hello': 'world'}
+@app.route('/', methods=["GET"])
+def index():
+    return "OK", 200
+
+# class HelloWorld(Resource):
+#     def get(self):
+#         return {'hello': 'world'}
 
 
-api.add_resource(HelloWorld, '/')
+# api.add_resource(HelloWorld, '/')
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=443, ssl_context='adhoc')
