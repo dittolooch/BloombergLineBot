@@ -3,6 +3,7 @@ FROM python:3.8-alpine3.10
 COPY . /BloombergLineBot
 WORKDIR /BloombergLineBot
 RUN apk add --no-cache --virtual .build-deps gcc musl-dev \
+    && apk add gcc musl-dev python3-dev \
     && pip install cython \
     && pip install -r requirements.txt \
     && apk del .build-deps gcc musl-devgit 
