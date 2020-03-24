@@ -15,6 +15,7 @@ handler = WebhookHandler("45a4c6945c2a5ad282d2d82f231b5862")
 @app.route('/line', methods=["POST"])
 def webhook():
     try:
+        print(request.headers)
         signature = request.headers["X-Line-Signature"]
         body = request.get_data(as_text=True)
         handler.handle(body, signature)
