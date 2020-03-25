@@ -39,4 +39,4 @@ def index():
 # api.add_resource(HelloWorld, '/')
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=443, ssl_context='adhoc')
+    app.run(debug=True, host='0.0.0.0', port=443, ssl_context=('/etc/letsencrypt/live/timmy.rent/cert.pem', '/etc/letsencrypt/live/timmy.rent/privkey.pem'))
