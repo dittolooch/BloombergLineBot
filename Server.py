@@ -40,7 +40,6 @@ def article():
 
 @handler.add(MessageEvent, message=TextMessage)
 def message_text(event):
-    articles = "@".join(db.getArticles())
     actions = [MessageAction(label="News", text="get_news"), MessageAction(
         label="Opinion", text="get_opinions")]
     line_bot_api.reply_message(
