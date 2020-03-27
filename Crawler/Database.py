@@ -5,7 +5,7 @@ from firebase_admin import firestore
 
 class Database:
     def __init__(self):
-        cred = credentials.Certificate('./secret.json')
+        cred = credentials.Certificate('/BloombergLineBot/Crawler/secret.json')
         firebase_admin.initialize_app(cred, {
             'projectId': "bloomberglinebot",
         })

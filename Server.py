@@ -32,10 +32,9 @@ def webhook():
 def index():
     return "OK", 200
 
-
+db = Database()
 @handler.add(MessageEvent, message=TextMessage)
 def message_text(event):
-    db = Database()
     articles = "@".join(db.getArticles())
     line_bot_api.reply_message(
         event.reply_token,
