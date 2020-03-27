@@ -62,8 +62,8 @@ def handle_postback(event):
 def message_text(event):
     new = db.getArticles(articleType="news")[0]
     opinion = db.getArticles(articleType="opinion")[0]
-    actions = [URIAction(label="News", uri=new["url"], alt_uri=new["url"]), URIAction(
-        label="Opinion", uri=opinion["url"], alt_uri=opinion["url"])]
+    actions = [URIAction(label="News", uri="https://timmy.rent/api"+new["url"], alt_uri="https://timmy.rent/api"+new["url"]), URIAction(
+        label="Opinion", uri="https://timmy.rent/api"+opinion["url"], alt_uri="https://timmy.rent/api"+opinion["url"])]
     line_bot_api.reply_message(
         event.reply_token,
         # TextSendMessage(text=articles),
