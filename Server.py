@@ -39,7 +39,12 @@ def article(articleType, articleDate, slug):
     print(url)
     articleDict = db.getArticle(url, articleDate)
     if articleDict:
-        return articleDict[0]["content"], 200
+        return """
+      <!DOCTYPE html>
+      <html>
+      <body><p>{}</p></body>
+      </html>
+      """.format(articleDict[0]["content"]), 200
     return "Not Found", 200
 
 
