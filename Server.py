@@ -42,7 +42,7 @@ def article(articleType, articleDate, slug):
         return """
       <!DOCTYPE html>
       <html>
-      <body><p>{}</p></body>
+      <body><p style="font-size:2vw;">{}</p></body>
       </html>
       """.format(articleDict[0]["content"]), 200
     return "Not Found", 200
