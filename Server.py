@@ -45,7 +45,7 @@ def message_text(event):
     line_bot_api.reply_message(
         event.reply_token,
         # TextSendMessage(text=articles),
-        TemplateSendMessage(template=ButtonsTemplate(
+        TemplateSendMessage(alt_text="Your device does not support this bot...", template=ButtonsTemplate(
             text="What do you want to read?", title="From Today's Bloomberg Headlines", actions=actions))
     )
 
