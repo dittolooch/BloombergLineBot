@@ -3,7 +3,7 @@ from flask import Flask, request
 from flask_restful import Resource, Api
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
-from linebot.models import MessageEvent, TextMessage, TextSendMessage, TemplateSendMessage, ButtonsTemplate, MessageAction, PostbackAction, PostbackEvent
+from linebot.models import MessageEvent, TextMessage, TextSendMessage, TemplateSendMessage, ButtonsTemplate, MessageAction, PostbackAction, PostbackEvent, URIAction
 from Crawler.Database import Database
 app = Flask(__name__)
 api = Api(app)
@@ -60,8 +60,10 @@ def handle_postback(event):
 
 @handler.add(MessageEvent, message=TextMessage)
 def message_text(event):
-    actions = [PostbackAction(label="News", data="news", display_text="News", ), PostbackAction(
-        label="Opinion", data="opinion", display_text="Opinion")]
+    new = db.getArticles(articleType="news")[0]
+    opinion = db.getArticles(articleType="opinion")[0]
+    actions = [URIAction(label="News", uri=new["url"], alt_uri=new["url"]), URIAction(
+        label="Opinion", uri=opinion["url"], alt_uri=opinion["url"])]
     line_bot_api.reply_message(
         event.reply_token,
         # TextSendMessage(text=articles),
