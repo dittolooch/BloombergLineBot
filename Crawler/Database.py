@@ -31,8 +31,9 @@ class Database:
             except:
                 print(article.title)
 
-    def getArticles(self, dateString):
-        ref = self.db.collection(dateString)
+    def getArticles(self, dateString=None):
+        ref = self.db.collection(dateString if dateString else str(datetime.datetime.today().date()
+                                                                   ))
         docs = ref.stream()
         articles = []
         for doc in docs:
