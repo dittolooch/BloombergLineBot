@@ -1,10 +1,10 @@
 # Dockerfile - this is a comment. Delete me if you want.
-FROM python:3.8-alpine3.10
+FROM python:3.8-slim-buster
 RUN mkdir /BloombergLineBot
 WORKDIR /BloombergLineBot
 COPY requirements.txt requirements.txt
 RUN apk add --no-cache --virtual .build-deps musl-dev python3-dev python-dev make gcc linux-headers && pip install -r requirements.txt && apk del .build-deps musl-dev gcc
-RUN adduser flask --system
+RUN useradd -r flask
 USER flask
 
 EXPOSE 5000
