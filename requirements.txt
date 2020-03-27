@@ -1,4 +1,5 @@
 
+cython
 beautifulsoup4==4.8.2
 firebase-admin==4.0.0
 Flask==1.1.1
