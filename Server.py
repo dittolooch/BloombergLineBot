@@ -4,6 +4,7 @@ from flask_restful import Resource, Api
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
+from Crawler.Database import Database
 app = Flask(__name__)
 api = Api(app)
 
@@ -34,17 +35,13 @@ def index():
 
 @handler.add(MessageEvent, message=TextMessage)
 def message_text(event):
+    db = Database()
+    articles = "@".join(db.getArticles())
     line_bot_api.reply_message(
         event.reply_token,
-        TextSendMessage(text=event.message.text+"test")
+        TextSendMessage(text=articles)
     )
 
-# class HelloWorld(Resource):
-#     def get(self):
-#         return {'hello': 'world'}
-
-
-# api.add_resource(HelloWorld, '/')
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
