@@ -31,9 +31,13 @@ class Database:
             except:
                 print(article.title)
 
-    def getArticles(self, dateString=None):
+    def getArticles(self, dateString=None, articleType=None):
         ref = self.db.collection(dateString if dateString else str(datetime.datetime.today().date()
                                                                    ))
+        if articleType == "news":
+            ref = ref.where("type", "==", "news")
+        elif articleType == "opinion":
+            ref = ref.where("type", "==", "opinion")
         docs = ref.stream()
         articles = []
         for doc in docs:
