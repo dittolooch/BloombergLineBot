@@ -33,9 +33,14 @@ def index():
     return "OK", 200
 
 
-@app.route('/article', methods=["GET"])
-def article():
-    return "OK", 200
+@app.route('/api/<articleType>/articles/<articleDate>/<slug>', methods=["GET"])
+def article(articleType, articleDate, slug):
+    url = "/{}/articles/{}/{}".format(articleType, articleDate, slug)
+    print(url)
+    articleDict = db.getArticle(url, articleDate)
+    if articleDict:
+        return articleDict[0]["content"], 200
+    return "Not Found", 200
 
 
 @handler.add(PostbackEvent)
@@ -43,7 +48,8 @@ def handle_postback(event):
     if event.postback.data in ['news', 'opinion']:
         news = db.getArticles(articleType=event.postback.data)
         line_bot_api.reply_message(
-            event.reply_token, TextSendMessage(text=news[0]["content"])
+            event.reply_token, TextSendMessage(
+                text="https://timmy.rent/api/"+news[0]["url"])
         )
 
 

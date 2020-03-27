@@ -44,6 +44,14 @@ class Database:
             articles.append(doc.to_dict())
         return articles
 
+    def getArticle(self, url, articleDate):
+        ref = self.db.collection(articleDate).where("url", "==", url)
+        docs = ref.stream()
+        articles = []
+        for doc in docs:
+            articles.append(doc.to_dict())
+        return articles
+
 
 if __name__ == "__main__":
     db = Database()
