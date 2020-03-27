@@ -31,6 +31,14 @@ def webhook():
 def index():
     return "OK", 200
 
+
+@handler.add(MessageEvent, message=TextMessage)
+def message_text(event):
+    line_bot_api.reply_message(
+        event.reply_token,
+        TextSendMessage(text=event.message.text)
+    )
+
 # class HelloWorld(Resource):
 #     def get(self):
 #         return {'hello': 'world'}
@@ -39,4 +47,4 @@ def index():
 # api.add_resource(HelloWorld, '/')
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=443, ssl_context=('/etc/letsencrypt/live/timmy.rent/cert.pem', '/etc/letsencrypt/live/timmy.rent/privkey.pem'))
+    app.run(debug=True, host='0.0.0.0')

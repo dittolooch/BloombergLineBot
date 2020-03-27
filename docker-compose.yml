@@ -3,11 +3,11 @@ services:
   flask:
     build: .
     image: flask
-    command: uwsgi --http-socket 0.0.0.0:5000 --wsgi-file Server.py --callable server
+    command: uwsgi --http-socket 0.0.0.0:5000 --wsgi-file Server.py --callable app
     labels:
       - "traefik.enable=true"
       - "traefik.backend=flask"
-      - "traefik.frontend.rule=${TRAEFIK_FRONTEND_RULE}"
+      - "traefik.frontend.rule=Host:timmy.rent
   traefik:
     image: traefik:v1.7.16
     labels:
