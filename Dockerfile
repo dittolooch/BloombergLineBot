@@ -2,9 +2,9 @@
 FROM python:3.8-alpine3.10
 COPY . /BloombergLineBot
 WORKDIR /BloombergLineBot
-RUN apk add --no-cache --virtual .build-deps gcc musl-dev libressl-dev libffi-dev \
-    && apk add gcc musl-dev python3-dev \
-    && pip install cython \
-    && pip install -r requirements.txt
-ENTRYPOINT ["python3"]
-CMD ["Server.py"]
+RUN apk add --no-cache --virtual .build-deps musl-dev gcc linux-headers && pip install -r requirements.txt && apk del .build-deps musl-dev gcc
+RUN useradd -r flask
+USER flask
+
+EXPOSE 5000
+CMD ["uwsgi", "--http-socket", "0.0.0.0:5000", "--wsgi-file", "Server.py", "--callable", "server"]
