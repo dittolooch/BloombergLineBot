@@ -22,3 +22,17 @@ class Database:
                 })
             except:
                 print(article.title)
+
+    def getArticles(self):
+        ref = self.db.collection('article')
+        docs = ref.stream()
+        articles = []
+        for doc in docs:
+            articles.append(doc.id)
+        return articles
+
+
+if __name__ == "__main__":
+    db = Database()
+    articles = db.getArticles()
+    print(articles)
