@@ -2,7 +2,7 @@
 FROM python:3.8-alpine3.10
 RUN mkdir /BloombergLineBot
 WORKDIR /BloombergLineBot
-VOLUME $(pwd):/BloombergLineBot
+COPY requirements.txt requirements.txt
 RUN apk add --no-cache --virtual .build-deps musl-dev gcc linux-headers && pip install -r requirements.txt && apk del .build-deps musl-dev gcc
 RUN adduser flask --system
 USER flask
