@@ -9,6 +9,7 @@ RUN apt-get update \
     && pip install -r requirements.txt
 #--virtual .build-deps musl-dev python3-dev python-dev make gcc linux-headers && pip install -r requirements.txt && apk del .build-deps musl-dev gcc
 RUN useradd -r flask
+RUN sudo chown -R flask /BloombergLineBot
 USER flask
 
 EXPOSE 5000
