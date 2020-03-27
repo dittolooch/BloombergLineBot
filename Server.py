@@ -3,11 +3,11 @@ from flask import Flask, request
 from flask_restful import Resource, Api
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
-from linebot.models import MessageEvent, TextMessage, TextSendMessage
+from linebot.models import MessageEvent, TextMessage, TextSendMessage, TemplateSendMessage, ButtonsTemplate, MessageAction
 from Crawler.Database import Database
 app = Flask(__name__)
 api = Api(app)
-
+db = Database()
 line_bot_api = LineBotApi(
     "3a4G473Gy2zFWCQw9Mu58QT+Vg9Mhs7x/fpNXBDDbTvY5/b+myM0pGVNyGY7H+Q1OHKd0HWO33FaBlxEER09oc3MEda+WbF/7q9/jr2FMQic1YgwBuGcC4uLoHzxKVj1Fd41WB2fhQtg45Z7mJDDegdB04t89/1O/w1cDnyilFU=")
 handler = WebhookHandler("45a4c6945c2a5ad282d2d82f231b5862")
@@ -32,13 +32,22 @@ def webhook():
 def index():
     return "OK", 200
 
-db = Database()
+
+@app.route('/article', methods=["GET"])
+def article():
+    return "OK", 200
+
+
 @handler.add(MessageEvent, message=TextMessage)
 def message_text(event):
     articles = "@".join(db.getArticles())
+    actions = [MessageAction(label="News", text="get_news"), MessageAction(
+        label="Opinion", text="get_opinions")]
     line_bot_api.reply_message(
         event.reply_token,
-        TextSendMessage(text=articles)
+        # TextSendMessage(text=articles),
+        TemplateSendMessage(template=ButtonsTemplate(
+            text="What do you want to read?", title="From Today's Bloomberg Headlines", actions=actions))
     )
 
 

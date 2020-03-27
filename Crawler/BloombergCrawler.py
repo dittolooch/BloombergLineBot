@@ -10,6 +10,12 @@ class Article:
     def __init__(self, url, parser):
         self.parser = parser
         self.url = url
+        self.splitUrl = url.split("/")
+
+    @property
+    def cleanUrl(self):
+        questionMarkIndex = self.url.index("?")
+        return self.url[:questionMarkIndex]
 
     @property
     def title(self):
@@ -20,13 +26,18 @@ class Article:
         try:
             return self._paragraphs
         except:
-            pTags = self.parser.findAll("p")
-            self._paragraphs = "".join([str(tag) for tag in pTags])
+            pTags = self.parser.find("div", class_="body-columns").findAll("p")
+            self._paragraphs = "\n\n".join([tag.get_text() for tag in pTags])
+            print(self._paragraphs)
             return self._paragraphs
 
     @property
+    def contentType(self):
+        return self.splitUrl[1]
+
+    @property
     def publishTime(self):
-        return self.parser.find("time").find("noscript").contents[0]
+        return self.splitUrl[3]
 
 
 class BloombergCrawler:
@@ -43,7 +54,7 @@ class BloombergCrawler:
         chrome_options.add_experimental_option(
             "prefs", {'profile.managed_default_content_settings.javascript': 2})
         driver = webdriver.Chrome(
-            "./chromedriver", chrome_options=chrome_options)
+            "/Users/warrencheng/BloombergLineBot/chromedriver", chrome_options=chrome_options)
         self.driver = driver
 
     def _getParserFrom(self, url):
