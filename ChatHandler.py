@@ -11,7 +11,7 @@ class ChatHandler:
 
     def __init__(self, db):
         self.db = db
-        self.api_url = "https://timmy.rent/api"
+        self.api_url = "https://timmy.rent/api/"
 
     def getButtonsTemplateForNewsTypeSelection(self):
         actions = [

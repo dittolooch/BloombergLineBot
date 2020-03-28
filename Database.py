@@ -43,7 +43,7 @@ class Database:
                                                                    ))
         if articleType == PostbackIntent.GET_NEWS:
             ref = ref.where("type", "==", PostbackIntent.GET_NEWS)
-        elif articleType == "opinion":
+        elif articleType == PostbackIntent.GET_OPINIONS:
             ref = ref.where("type", "==", PostbackIntent.GET_OPINIONS)
         docs = ref.stream()
         articles = []

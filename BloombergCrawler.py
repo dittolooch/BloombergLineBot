@@ -21,8 +21,11 @@ class Article:
             url = imageClass.find("img")["src"]
         elif videoClass:
             url = imageClass.find("img")["src"]
-
-        return url.replace("150x", "900x") if url else url
+        if url:
+            urlSplit = url.split("/")
+            urlSplit[-1] = "600x-1.jpg"
+            url = "/".join(urlSplit)
+        return url
 
     @property
     def html(self):
