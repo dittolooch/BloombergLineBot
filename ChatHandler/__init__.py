@@ -46,7 +46,7 @@ class ChatHandler:
         )
 
     def handlePostback(self, api, event):
-        if event.postback.data in ['news', 'opinion']:
+        if event.postback.data in [PostbackIntent.GET_OPINIONS, PostbackIntent.GET_NEWS]:
             articles = self.db.getArticles(
                 articleType=event.postback.data)[:10]
             api.reply_message(
