@@ -7,7 +7,7 @@ import time
 
 
 class Article:
-    def __init__(self, url, parser):
+    def __init__(self, url=None, parser=None):
         self.parser = parser
         self.url = url
         self.splitUrl = url.split("/")
