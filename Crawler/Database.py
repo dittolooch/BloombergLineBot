@@ -44,6 +44,8 @@ class Database:
         docs = ref.stream()
         articles = []
         for doc in docs:
+            docDict = doc.to_dict()
+            docDict["title"] = doc.id
             articles.append(doc.to_dict())
         return articles
 
@@ -51,6 +53,8 @@ class Database:
         ref = self.db.collection("html").ref(url)
         try:
             doc = ref.get()
+            docDict = doc.to_dict()
+            docDict["title"] = doc.id
             return doc.to_dict()
         except:
             return None
