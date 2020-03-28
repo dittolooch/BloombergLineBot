@@ -13,6 +13,10 @@ class Article:
         self.splitUrl = url.split("/")
 
     @property
+    def html(self):
+        return str(self.parser)
+
+    @property
     def cleanUrl(self):
         questionMarkIndex = self.url.index("?")
         return self.url[:questionMarkIndex]
@@ -28,7 +32,6 @@ class Article:
         except:
             pTags = self.parser.find("div", class_="body-columns").findAll("p")
             self._paragraphs = "\n\n".join([tag.get_text() for tag in pTags])
-            print(self._paragraphs)
             return self._paragraphs
 
     @property
@@ -53,8 +56,11 @@ class BloombergCrawler:
         chrome_options = Options()
         chrome_options.add_experimental_option(
             "prefs", {'profile.managed_default_content_settings.javascript': 2})
+        mobile_emulation = {"deviceName": "iPhone 6"}
+        chrome_options.add_experimental_option(
+            "mobileEmulation", mobile_emulation)
         driver = webdriver.Chrome(
-            "/Users/warrencheng/BloombergLineBot/chromedriver", chrome_options=chrome_options)
+            "/Users/warrencheng/BloombergLineBot/chromedriver", chrome_options=chrome_options, )
         self.driver = driver
 
     def _getParserFrom(self, url):

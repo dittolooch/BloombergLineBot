@@ -25,7 +25,8 @@ class Database:
                     "time": article.publishTime,
                     "content": article.paragraphs,
                     "url": article.cleanUrl,
-                    "type": article.contentType
+                    "type": article.contentType,
+                    "html": article.html
                 }
                 doc_ref.set(documentDict)
             except:
