@@ -35,15 +35,15 @@ def index():
     return "OK", 200
 
 
-@app.route('/api/<articleType>/articles/<articleDate>/<slug>', methods=["GET"])
-def article(articleType, articleDate, slug):
-    url = "/{}/articles/{}/{}".format(articleType, articleDate, slug)
-    articleDict = db.getArticle(url)
+@app.route('/api/<titleSlug>', methods=["GET"])
+def article(titleSlug):
+
+    articleDict = db.getArticle(titleSlug)
     if articleDict:
         return """
       <!DOCTYPE html>
       {}
-      """.format(articleDict[0]["html"]), 200
+      """.format(articleDict["html"]), 200
     return "Not Found", 200
 
 

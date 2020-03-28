@@ -30,6 +30,10 @@ class Article:
         return self.parser.find("h1").contents[0]
 
     @property
+    def titleSlug(self):
+        return self.cleanUrl.split("/")[-1]
+
+    @property
     def paragraphs(self):
         try:
             return self._paragraphs
@@ -91,6 +95,7 @@ class BloombergCrawler:
             article = Article(url, articleParser) if articleParser else None
             self.articles.append(article)
             time.sleep(5)
+
         self.db.save(self.articles)
         self.driver.quit()
 

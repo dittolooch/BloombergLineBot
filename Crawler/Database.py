@@ -20,18 +20,21 @@ class Database:
         for article in articles:
             try:
                 doc_ref = self.db.collection(
-                    article.publishTime).document(article.title)
+                    article.publishTime).document(article.titleSlug)
                 documentDict = {
                     "time": article.publishTime,
                     "url": article.cleanUrl,
                     "type": article.contentType,
-                    "image": article.imageSource
+                    "image": article.imageSource,
+                    "title": article.title,
+                    "titleSlug": article.titleSlug
                 }
                 doc_ref.set(documentDict)
                 html_ref = self.db.collection(
-                    'html').document(article.cleanUrl)
-                html_ref.set({"html": article.html})
-            except:
+                    'html').document(article.titleSlug)
+                html_ref.set({"html": article.html, "title": article.title})
+            except Exception as e:
+                print(e)
                 print(article.title)
 
     def getArticles(self, dateString=None, articleType=None):
@@ -44,17 +47,13 @@ class Database:
         docs = ref.stream()
         articles = []
         for doc in docs:
-            docDict = doc.to_dict()
-            docDict["title"] = doc.id
             articles.append(doc.to_dict())
         return articles
 
-    def getArticle(self, url):
-        ref = self.db.collection("html").ref(url)
+    def getArticle(self, titleSlug):
+        ref = self.db.collection("html").document(titleSlug)
         try:
             doc = ref.get()
-            docDict = doc.to_dict()
-            docDict["title"] = doc.id
             return doc.to_dict()
         except:
             return None

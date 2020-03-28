@@ -1,7 +1,4 @@
 import linebot.models as models
-from Crawler.Database import Database
-
-db = Database()
 
 
 class PostbackIntent:
