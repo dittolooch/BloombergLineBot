@@ -3,11 +3,13 @@ from flask import Flask, request
 from flask_restful import Resource, Api
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
-from linebot.models import MessageEvent, TextMessage, TextSendMessage, TemplateSendMessage, ButtonsTemplate, MessageAction, PostbackAction, PostbackEvent, URIAction
+from linebot.models import MessageEvent, TextMessage, PostbackEvent
 from Crawler.Database import Database
+from ChatHandler import ChatHandler
 app = Flask(__name__)
 api = Api(app)
 db = Database()
+chatHandler = ChatHandler(db)
 line_bot_api = LineBotApi(
     "3a4G473Gy2zFWCQw9Mu58QT+Vg9Mhs7x/fpNXBDDbTvY5/b+myM0pGVNyGY7H+Q1OHKd0HWO33FaBlxEER09oc3MEda+WbF/7q9/jr2FMQic1YgwBuGcC4uLoHzxKVj1Fd41WB2fhQtg45Z7mJDDegdB04t89/1O/w1cDnyilFU=")
 handler = WebhookHandler("45a4c6945c2a5ad282d2d82f231b5862")
@@ -36,8 +38,7 @@ def index():
 @app.route('/api/<articleType>/articles/<articleDate>/<slug>', methods=["GET"])
 def article(articleType, articleDate, slug):
     url = "/{}/articles/{}/{}".format(articleType, articleDate, slug)
-    print(url)
-    articleDict = db.getArticle(url, articleDate)
+    articleDict = db.getArticle(url)
     if articleDict:
         return """
       <!DOCTYPE html>
@@ -48,26 +49,12 @@ def article(articleType, articleDate, slug):
 
 @handler.add(PostbackEvent)
 def handle_postback(event):
-    if event.postback.data in ['news', 'opinion']:
-        news = db.getArticles(articleType=event.postback.data)
-        line_bot_api.reply_message(
-            event.reply_token, TextSendMessage(
-                text="https://timmy.rent/api/"+news[0]["url"])
-        )
+    chatHandler.handlePostback(line_bot_api, event)
 
 
 @handler.add(MessageEvent, message=TextMessage)
 def message_text(event):
-    new = db.getArticles(articleType="news")[0]
-    opinion = db.getArticles(articleType="opinion")[0]
-    actions = [URIAction(label="News", uri="https://timmy.rent/api"+new["url"], alt_uri="https://timmy.rent/api"+new["url"]), URIAction(
-        label="Opinion", uri="https://timmy.rent/api"+opinion["url"], alt_uri="https://timmy.rent/api"+opinion["url"])]
-    line_bot_api.reply_message(
-        event.reply_token,
-        # TextSendMessage(text=articles),
-        TemplateSendMessage(alt_text="Your device does not support this bot...", template=ButtonsTemplate(
-            text="What do you want to read?", title="From Today's Bloomberg Headlines", actions=actions))
-    )
+    chatHandler.handleMessageText(line_bot_api, event)
 
 
 if __name__ == '__main__':

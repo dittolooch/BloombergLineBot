@@ -8,12 +8,12 @@ SECRET = "/BloombergLineBot/Crawler/secret.json" if os.uname()[
 
 
 class Database:
-    def __init__(self):
-        cred = credentials.Certificate(SECRET)
-        firebase_admin.initialize_app(cred, {
-            'projectId': "bloomberglinebot",
-        })
+    cred = credentials.Certificate(SECRET)
+    firebase_admin.initialize_app(cred, {
+        'projectId': "bloomberglinebot",
+    })
 
+    def __init__(self):
         self.db = firestore.client()
 
     def save(self, articles):
@@ -23,12 +23,14 @@ class Database:
                     article.publishTime).document(article.title)
                 documentDict = {
                     "time": article.publishTime,
-                    "content": article.paragraphs,
                     "url": article.cleanUrl,
                     "type": article.contentType,
-                    "html": article.html
+                    "image": article.imageSource
                 }
                 doc_ref.set(documentDict)
+                html_ref = self.db.collection(
+                    'html').document(article.cleanUrl)
+                html_ref.set({"html": article.html})
             except:
                 print(article.title)
 
@@ -45,13 +47,13 @@ class Database:
             articles.append(doc.to_dict())
         return articles
 
-    def getArticle(self, url, articleDate):
-        ref = self.db.collection(articleDate).where("url", "==", url)
-        docs = ref.stream()
-        articles = []
-        for doc in docs:
-            articles.append(doc.to_dict())
-        return articles
+    def getArticle(self, url):
+        ref = self.db.collection("html").ref(url)
+        try:
+            doc = ref.get()
+            return doc.to_dict()
+        except:
+            return None
 
 
 if __name__ == "__main__":

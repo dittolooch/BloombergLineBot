@@ -13,6 +13,10 @@ class Article:
         self.splitUrl = url.split("/")
 
     @property
+    def imageSource(self):
+        return self.parser.find("div", class_="image").find("img")["src"]
+
+    @property
     def html(self):
         return str(self.parser)
 
