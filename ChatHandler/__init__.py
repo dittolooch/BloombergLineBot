@@ -28,11 +28,11 @@ class ChatHandler:
     def getCarouselTemplateFor(self, articles):
         columns = []
         for article in articles:
-            destinationUrl = self.api_url + article["cleanUrl"]
+            destinationUrl = self.api_url + article["url"]
             action = models.URIAction(
                 label="Read It", uri=destinationUrl, alt_uri=destinationUrl)
             columns.append(models.CarouselColumn(text=article["title"], title=article["title"],
-                                                 thumbnail_image_url=article["imageSource"], actions=[action]))
+                                                 thumbnail_image_url=article["image"], actions=[action]))
         carousel = models.CarouselTemplate(
             columns=columns, image_aspect_ratio="rectangle", image_size="cover")
         return carousel
