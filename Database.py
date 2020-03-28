@@ -3,8 +3,9 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
 import os
+from ChatHandler import PostbackIntent
 SECRET = "/BloombergLineBot/Crawler/secret.json" if os.uname()[
-    0] != "Darwin" else "/Users/warrencheng/BloombergLineBot/Crawler/secret.json"
+    0] != "Darwin" else "/Users/warrencheng/BloombergLineBot/secret.json"
 
 
 class Database:
@@ -40,10 +41,10 @@ class Database:
     def getArticles(self, dateString=None, articleType=None):
         ref = self.db.collection(dateString if dateString else str(datetime.datetime.today().date()
                                                                    ))
-        if articleType == "news":
-            ref = ref.where("type", "==", "news")
+        if articleType == PostbackIntent.GET_NEWS:
+            ref = ref.where("type", "==", PostbackIntent.GET_NEWS)
         elif articleType == "opinion":
-            ref = ref.where("type", "==", "opinion")
+            ref = ref.where("type", "==", PostbackIntent.GET_OPINIONS)
         docs = ref.stream()
         articles = []
         for doc in docs:

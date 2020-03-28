@@ -2,8 +2,8 @@ import linebot.models as models
 
 
 class PostbackIntent:
-    GET_NEWS = "News"
-    GET_OPINIONS = "Opinion"
+    GET_NEWS = "NEWS"
+    GET_OPINIONS = "OPINION"
 
 
 class ChatHandler:
@@ -25,7 +25,7 @@ class ChatHandler:
     def getCarouselTemplateFor(self, articles):
         columns = []
         for article in articles:
-            destinationUrl = self.api_url + article["url"]
+            destinationUrl = self.api_url + article["titleSlug"]
             action = models.URIAction(
                 label="Read It", uri=destinationUrl, alt_uri=destinationUrl)
             shorterTitle = article["title"][:57] + \

@@ -14,7 +14,15 @@ class Article:
 
     @property
     def imageSource(self):
-        return self.parser.find("div", class_="image").find("img")["src"]
+        imageClass = self.parser.find("div", class_="image")
+        videoClass = self.parser.find("div", class_="video_player")
+        url = None
+        if imageClass:
+            url = imageClass.find("img")["src"]
+        elif videoClass:
+            url = imageClass.find("img")["src"]
+
+        return url.replace("150x", "900x") if url else url
 
     @property
     def html(self):
@@ -44,7 +52,7 @@ class Article:
 
     @property
     def contentType(self):
-        return self.splitUrl[1]
+        return self.splitUrl[1].upper()
 
     @property
     def publishTime(self):

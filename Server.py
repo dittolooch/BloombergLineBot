@@ -4,7 +4,7 @@ from flask_restful import Resource, Api
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, PostbackEvent
-from Crawler.Database import Database
+from Database import Database
 from ChatHandler import ChatHandler
 app = Flask(__name__)
 api = Api(app)
