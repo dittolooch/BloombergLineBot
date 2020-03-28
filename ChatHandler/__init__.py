@@ -28,7 +28,9 @@ class ChatHandler:
             destinationUrl = self.api_url + article["url"]
             action = models.URIAction(
                 label="Read It", uri=destinationUrl, alt_uri=destinationUrl)
-            columns.append(models.CarouselColumn(text=article["title"], title=article["title"],
+            shorterTitle = article["title"][:37] + \
+                "..." if len(article["title"]) > 40 else article["title"]
+            columns.append(models.CarouselColumn(text=shorterTitle, title=shorterTitle,
                                                  thumbnail_image_url=article["image"], actions=[action]))
         carousel = models.CarouselTemplate(
             columns=columns, image_aspect_ratio="rectangle", image_size="cover")
