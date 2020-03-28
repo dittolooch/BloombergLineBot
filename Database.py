@@ -36,15 +36,13 @@ class Database:
                 html_ref.set({"html": article.html, "title": article.title})
             except Exception as e:
                 print(e)
-                print(article.title)
+                print("Failed to save: {}".format(article.title))
 
     def getArticles(self, dateString=None, articleType=None):
         ref = self.db.collection(dateString if dateString else str(datetime.datetime.today().date()
                                                                    ))
-        if articleType == PostbackIntent.GET_NEWS:
-            ref = ref.where("type", "==", PostbackIntent.GET_NEWS)
-        elif articleType == PostbackIntent.GET_OPINIONS:
-            ref = ref.where("type", "==", PostbackIntent.GET_OPINIONS)
+        if articleType:
+            ref = ref.where("type", "==", articleType)
         docs = ref.stream()
         articles = []
         for doc in docs:
