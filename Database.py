@@ -18,6 +18,17 @@ class Database:
         self.db = firestore.client()
 
     def save(self, articles):
+        raise NotImplementedError
+
+    def getArticles(self, dateString=None, articleType=None):
+        raise NotImplementedError
+
+    def getArticle(self, titleSlug):
+        raise NotImplementedError
+
+
+class BloombergDB(Database):
+    def save(self, articles):
         for article in articles:
             try:
                 doc_ref = self.db.collection(
@@ -38,16 +49,25 @@ class Database:
                 print(e)
                 print("Failed to save: {}".format(article.title))
 
-    def getArticles(self, dateString=None, articleType=None):
-        ref = self.db.collection(dateString if dateString else str(datetime.datetime.today().date()
-                                                                   ))
-        if articleType:
-            ref = ref.where("type", "==", articleType)
-        docs = ref.stream()
+    def getArticles(self, dateString=None, articleType=None, size=None):
+        size = size if size else 10
+        day = datetime.datetime.today().date() + datetime.timedelta(
+            days=1) if not dateString else datetime.datetime.strptime(dateString, "%Y-%m-%d")
         articles = []
-        for doc in docs:
-            articles.append(doc.to_dict())
-        return articles
+        while len(articles) < size:
+            day = day + datetime.timedelta(days=-1)
+            ref = self.db.collection(dateString if dateString else str(day))
+            if articleType:
+                ref = ref.where("type", "==", articleType)
+            docs = ref.stream()
+            streamCounter = 0
+            for doc in docs:
+                streamCounter += 1
+                articles.append(doc.to_dict())
+            if not streamCounter:
+                print("no stream")
+                break
+        return articles[:size]
 
     def getArticle(self, titleSlug):
         ref = self.db.collection("html").document(titleSlug)
@@ -58,8 +78,33 @@ class Database:
             return None
 
 
+class EconomistDB(Database):
+    economist = "economist"
+
+    def __init__(self):
+        super().__init__()
+        self.db = self.db.collection(self.economist)
+
+    def save(self, articles):
+        pass
+
+    def getArticles(self, dateString=None, articleType=None):
+        pass
+
+    def getArticle(self, titleSlug):
+        pass
+
+    def dateDownloaded(self, dateString):
+        ref = self.db.document(dateString)
+        try:
+            doc = ref.get()
+            return True
+        except:
+            return False
+
+
 if __name__ == "__main__":
-    db = Database()
-    articles = db.getArticles(str(datetime.datetime.today().date()))
+    db = BloombergDB()
+    articles = db.getArticles(
+        size=10, articleType="OPINION", dateString="2019-01-01")
     print(len(articles))
-    print(len([x for x in articles if x["type"] == "opinion"]))

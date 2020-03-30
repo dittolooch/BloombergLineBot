@@ -47,7 +47,7 @@ class ChatHandler:
     def handlePostback(self, api, event):
         if event.postback.data in [PostbackIntent.GET_OPINIONS, PostbackIntent.GET_NEWS]:
             articles = self.db.getArticles(
-                articleType=event.postback.data)[:10]
+                articleType=event.postback.data, size=10)
             api.reply_message(
                 event.reply_token, models.TemplateSendMessage(
                     alt_text=self.UNSUPPORTED_MESSAGE, template=self.getCarouselTemplateFor(articles))

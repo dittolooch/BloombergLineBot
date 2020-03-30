@@ -4,11 +4,11 @@ from flask_restful import Resource, Api
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, PostbackEvent
-from Database import Database
+from Database import BloombergDB
 from ChatHandler import ChatHandler
 app = Flask(__name__)
 api = Api(app)
-db = Database()
+db = BloombergDB()
 chatHandler = ChatHandler(db)
 line_bot_api = LineBotApi(
     "3a4G473Gy2zFWCQw9Mu58QT+Vg9Mhs7x/fpNXBDDbTvY5/b+myM0pGVNyGY7H+Q1OHKd0HWO33FaBlxEER09oc3MEda+WbF/7q9/jr2FMQic1YgwBuGcC4uLoHzxKVj1Fd41WB2fhQtg45Z7mJDDegdB04t89/1O/w1cDnyilFU=")
